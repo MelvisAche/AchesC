@@ -3,14 +3,9 @@ package com.melvis;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.melvis.controllers.DiagnosisController;
 import com.melvis.controllers.DoctorControllers;
-
-import com.melvis.daos.PatientDAO;
-import com.melvis.daos.DiagnosisDAO;
-import com.melvis.daos.DoctorDAO;
-import com.melvis.models.Patient;
-import com.melvis.models.Doctor;
-import com.melvis.models.Diagnosis;
+import com.melvis.controllers.PatientController;
 import com.melvis.utils.ConnectionUtil;
 
 import io.javalin.Javalin;
@@ -18,14 +13,13 @@ import io.javalin.Javalin;
 public class Launcher {
 public static void main(String[] args) {
 	
-//	 EmployeeDAO eDAO = new EmployeeDAO();
-//	 RoleDAO rDAO = new RoleDAO();
+
 	System.out.println("============ Welcome to a simple Hospital management system=====");
 	//Try-with-resources block. It test whether our connection works
 	//It works by trying to open a certain resource
 	
 	try(Connection conn = ConnectionUtil.getConnection()){
-		System.out.println("Connection Successful");
+		System.out.println("Connection Successful...");
 	}catch(SQLException e) {
 		System.out.println("Connection failed...");
 		e.printStackTrace();
@@ -35,12 +29,27 @@ public static void main(String[] args) {
 			config -> {
 				config.enableCorsForAllOrigins();
 			}
-			).start(3000); //we need .start() to start our java server to port 5000
+			).start(8080); //we need .start() to start our java server to port 5000
 	
-	DoctorControllers pc = new DoctorControllers();
-	
+	DoctorControllers dc = new DoctorControllers();
 	//app.get() is the javalin method that takes in GET requests.
-	app.get("/doctor", pc.getDoctorHandler);
+	app.get("/doctor", dc.getDoctorHandler);
+	app.post("/insertDoctor", dc.insertDoctorHandler);
+	app.put("/doctor/:field", dc.updateDoctorHandler);
+	app.delete("/doctor/:doc_id", dc.deleteDoctorHandler);
+	
+	
+	PatientController pc = new PatientController();
+	app.get("/patient", pc.getPatientHandler);
+	app.post("/insertPatient", pc.insertPatientHandler);
+	app.put("/patient/:name", pc.updatePatientHandler);
+	app.delete("/patient/:pat_id", pc.deletePatientHandler);
+	
+	DiagnosisController dcn = new DiagnosisController();
+	app.get("/diagnosis", dcn.getDiagnosisHandler);
+	app.post("/insertDiagnosis", dcn.insertDiagnosisHandler);
+	app.put("/diagnosis/:prescription", dcn.updateDiagnosisHandler);
+	app.delete("/diagnosis/:diag_id", dcn.deleteDiagnosisHandler);
 }
 }
 

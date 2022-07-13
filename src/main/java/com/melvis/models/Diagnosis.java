@@ -4,7 +4,9 @@ public class Diagnosis {
 	private int diag_id;
 	private Patient pat;
 	private Doctor doc;
-	private String pat_name;
+	private int pat_id_fk; //used for inserting only
+	private int doc_id_fk;//used for inserting only
+	
 	private String symptoms;
 	private String diagnosis;
 	private String results;
@@ -15,24 +17,42 @@ public class Diagnosis {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Diagnosis(int diag_id, Patient pat, Doctor doc, String pat_name, String symptoms, String diagnosis, String results,
-			String prescription) {
+	public Diagnosis(int diag_id, Patient pat, Doctor doc, 
+			String symptoms, String diagnosis, String results, String prescription) {
 		super();
 		this.diag_id = diag_id;
 		this.pat = pat;
 		this.doc = doc;
-		this.pat_name = pat_name;
+		
 		this.symptoms = symptoms;
 		this.diagnosis = diagnosis;
 		this.results = results;
 		this.prescription = prescription;
 	}
 
-	public Diagnosis(Patient pat, Doctor doc, String pat_name, String symptoms, String diagnosis, String results, String prescription) {
+	public Diagnosis(Patient pat, Doctor doc, String symptoms,
+			String diagnosis, String results, String prescription) {
 		super();
 		this.pat = pat;
 		this.doc = doc;
-		this.pat_name = pat_name;
+		
+		this.symptoms = symptoms;
+		this.diagnosis = diagnosis;
+		this.results = results;
+		this.prescription = prescription;
+	}
+	
+	
+
+	public Diagnosis(int diag_id, Patient pat, Doctor doc, int pat_id_fk, int doc_id_fk,
+			String symptoms, String diagnosis, String results, String prescription) {
+		super();
+		this.diag_id = diag_id;
+		this.pat = pat;
+		this.doc = doc;
+		this.pat_id_fk = pat_id_fk;
+		this.doc_id_fk = doc_id_fk;
+		
 		this.symptoms = symptoms;
 		this.diagnosis = diagnosis;
 		this.results = results;
@@ -41,9 +61,25 @@ public class Diagnosis {
 
 	@Override
 	public String toString() {
-		return "Diagnosis [diag_id=" + diag_id + ", pat=" + pat + ", doc=" + doc + ", pat_name=" + pat_name
-				+ ", symptoms=" + symptoms + ", diagnosis=" + diagnosis + ", results=" + results + ", prescription="
-				+ prescription + "]";
+		return "Diagnosis [ pat_id_fk=" + pat_id_fk
+				+ ", doc_id_fk=" + doc_id_fk + ", symptoms=" + symptoms + ", diagnosis="
+				+ diagnosis + ", results=" + results + ", prescription=" + prescription + "]";
+	}
+
+	public int getPat_id_fk() {
+		return pat_id_fk;
+	}
+
+	public void setPat_id_fk(int pat_id_fk) {
+		this.pat_id_fk = pat_id_fk;
+	}
+
+	public int getDoc_id_fk() {
+		return doc_id_fk;
+	}
+
+	public void setDoc_id_fk(int doc_id_fk) {
+		this.doc_id_fk = doc_id_fk;
 	}
 
 	public int getDiag_id() {
@@ -68,14 +104,6 @@ public class Diagnosis {
 
 	public void setDoc(Doctor doc) {
 		this.doc = doc;
-	}
-	
-	public String getPat_name() {
-		return pat_name;
-	}
-
-	public void setPat_name(String pat_name) {
-		this.pat_name = pat_name;
 	}
 
 	public String getSymptoms() {

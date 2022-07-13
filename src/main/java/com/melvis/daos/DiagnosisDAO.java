@@ -16,33 +16,33 @@ import com.melvis.utils.ConnectionUtil;
 public class DiagnosisDAO implements DiagnosisDAOInterface{
 
 	@Override
-	public void insertDiagnosis(Diagnosis diagnosis, int pat_id, int doc_id) {
+	public boolean insertDiagnosis(Diagnosis diagnosis) {
 		// TODO Auto-generated method stub
 		try(Connection conn = ConnectionUtil.getConnection()){
-        String sql = "insert into diagnosis(pat_id_fk, doc_id_fk, pat_name, symptoms, diagnosis, results, prescription) values (?,?,?,?,?,?,);";
+        String sql = "insert into diagnosis(pat_id_fk, doc_id_fk, symptoms, diagnosis, results, prescription) values (?,?,?,?,?,?);";
 			//Instantiate a prepared statement to fill in the variable of our sql
 			PreparedStatement ps = conn.prepareStatement(sql);
 			//Fill in the values of our variables using ps.
-			ps.setInt(1, pat_id);
-			ps.setInt(2, doc_id);
-			ps.setString(3, diagnosis.getPat_name());
-			ps.setString(4, diagnosis.getSymptoms());
-			ps.setString(5, diagnosis.getDiagnosis());
-			ps.setString(6, diagnosis.getResults());
-			ps.setString(7, diagnosis.getPrescription());
+			ps.setInt(1, diagnosis.getPat_id_fk());
+			ps.setInt(2, diagnosis.getDoc_id_fk());
+			ps.setString(3, diagnosis.getSymptoms());
+			ps.setString(4, diagnosis.getDiagnosis());
+			ps.setString(5, diagnosis.getResults());
+			ps.setString(6, diagnosis.getPrescription());
 			
 			ps.executeUpdate();//this sends our sql off to the database
 			
-			System.out.println("Patient " + diagnosis.getPat_name() + " diagnosis" + " was completed successfully...");
-			
+			System.out.println("Patient diagnosis was completed successfully...");
+			return true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Insert Diagnosis failed");
 			e.printStackTrace();
 		}
+		return false;
 	}
 	
-	//This method gets all employees from the DB
+	//This method gets all diagnosis from the DB
     
 	public ArrayList<Diagnosis> getDiagnosis() {
  
@@ -55,7 +55,7 @@ public class DiagnosisDAO implements DiagnosisDAOInterface{
 			//remember to execute 
 			ResultSet rs = s.executeQuery(sql);
 			
-			ArrayList<Diagnosis> diagnosisList = new ArrayList();
+			ArrayList<Diagnosis> diagnosisList = new ArrayList<>();
 			// us rs.next()in a while loop to create diagnosis object and populate our ArrayList
 			
 			while(rs.next()) {
@@ -63,7 +63,6 @@ public class DiagnosisDAO implements DiagnosisDAOInterface{
 						rs.getInt("diag_id"),
 						null,
 						null,
-						rs.getString("pat_name"),
 						rs.getString("symptoms"),
 						rs.getString("diagnosis"),
 						rs.getString("results"),
@@ -94,17 +93,61 @@ public class DiagnosisDAO implements DiagnosisDAOInterface{
 			return diagnosisList;//once the while loop breaks 
 			
 		}catch(SQLException e) {
-			System.out.println("Something went wrong getting diagnosis");
+			System.out.println("Something went wrong getting diagnosis!");
 			e.printStackTrace();
 		}
 		return null;
 	}
+	
+	public boolean deleteDiagnosisId(int id) {
+		try (Connection conn = ConnectionUtil.getConnection()){
+			String sql = "delete from diagnosis where diag_id = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			
+			ps.executeUpdate();
+			System.out.println(id + " has been deleted successfully... ");
+			return true;
+		}catch(SQLException e)	{
+			System.out.println("Failed to delete!");
+			e.printStackTrace();
+		}
+		
+		return false;
+	
+
+	}
+
+	
+	public boolean updateDiagnosisResults(String results, String prescription) {
+		// TODO Auto-generated method stub
+		try (Connection conn = ConnectionUtil.getConnection()){
+			String sql = "update diagnosis set results = ? where prescription = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, results);
+			ps.setString(2, prescription);
+			ps.executeUpdate();
+			System.out.println( "Your results have been updated to " + results);
+			return true;
+		}catch(SQLException e)	{
+			System.out.println("Failed to update");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 
 	@Override
 	public ArrayList<Diagnosis> getdiagnosis() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+//	@Override
+//	public boolean insertDiagnosis(Diagnosis diag, int pat_id, int doc_id) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
 
 	
 

@@ -4,14 +4,35 @@ public class Doctor {
 	private int id;
 	private String doc_name;
 	private String doc_field;
-	private String doc_yoe;
+	private int doc_yoe;
 	private Patient pat;
+	private int pat_id_fk;
 	
 	public Doctor() {
 		super();
 	}
 	
-	public Doctor(String doc_name, String doc_field, String doc_yoe, Patient pat) {
+
+	public Doctor(String doc_name, String doc_field, int doc_yoe, Patient pat, int pat_id_fk) {
+		super();
+		this.doc_name = doc_name;
+		this.doc_field = doc_field;
+		this.doc_yoe = doc_yoe;
+		this.pat = pat;
+		this.pat_id_fk = pat_id_fk;
+	}
+
+	public Doctor(int id, String doc_name, String doc_field, int doc_yoe, Patient pat, int pat_id_fk) {
+		super();
+		this.id = id;
+		this.doc_name = doc_name;
+		this.doc_field = doc_field;
+		this.doc_yoe = doc_yoe;
+		this.pat = pat;
+		this.pat_id_fk = pat_id_fk;
+	}
+
+	public Doctor(String doc_name, String doc_field, int doc_yoe, Patient pat) {
 		super();
 		this.doc_name = doc_name;
 		this.doc_field = doc_field;
@@ -19,7 +40,7 @@ public class Doctor {
 		this.pat = pat;
 	}
 	
-	public Doctor(int id, String doc_name, String doc_field, String doc_yoe, Patient pat) {
+	public Doctor(int id, String doc_name, String doc_field, int doc_yoe, Patient pat) {
 		super();
 		this.id = id;
 		this.doc_name = doc_name;
@@ -31,7 +52,7 @@ public class Doctor {
 	@Override
 	public String toString() {
 		return "Doctor [id=" + id + ", doc_name=" + doc_name + ", doc_field=" + doc_field + ", doc_yoe=" + doc_yoe
-				+ ", pat=" + pat + "]";
+				+ ", pat=" + pat + ", pat_id_fk=" + pat_id_fk + "]";
 	}
 	
 	public int getId() {
@@ -52,10 +73,10 @@ public class Doctor {
 	public void setDoc_field(String doc_field) {
 		this.doc_field = doc_field;
 	}
-	public String getDoc_yoe() {
+	public int getDoc_yoe() {
 		return doc_yoe;
 	}
-	public void setDoc_yoe(String doc_yoe) {
+	public void setDoc_yoe(int doc_yoe) {
 		this.doc_yoe = doc_yoe;
 	}
 	public Patient getPat() {
@@ -63,6 +84,14 @@ public class Doctor {
 	}
 	public void setPat(Patient pat) {
 		this.pat = pat;
+	}
+	
+	public int getPat_id_fk() {
+		return pat_id_fk;
+	}
+
+	public void setPat_id_fk(int pat_id_fk) {
+		this.pat_id_fk = pat_id_fk;
 	}
 	
 

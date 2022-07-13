@@ -15,7 +15,7 @@ import com.melvis.utils.ConnectionUtil;
 public class DoctorDAO implements DoctorDAOInterface{
 
 	@Override
-	public void insertDoctor(Doctor doctor, int pat_id) {
+	public boolean insertDoctor(Doctor doctor) {
 		// TODO Auto-generated method stub
 		try(Connection conn = ConnectionUtil.getConnection()){
 			String sql = "insert into doctor(doc_name, doc_field, doc_yoe, pat_id_fk) values (?,?,?,?);";
@@ -25,22 +25,24 @@ public class DoctorDAO implements DoctorDAOInterface{
 			
 			ps.setString(1, doctor.getDoc_name());
 			ps.setString(2, doctor.getDoc_field());
-			ps.setString(3, doctor.getDoc_yoe());
-			ps.setInt(4, pat_id);
+			ps.setInt(3, doctor.getDoc_yoe());
+			ps.setInt(4, doctor.getPat_id_fk());
 			
 			
 			ps.executeUpdate();//this sends our sql off to the database
 			
-			System.out.println("Doctor " + doctor.getDoc_name() + " was completed successfully...");
+			System.out.println("Doctor " + doctor.getDoc_name() + " was added successfully...");
+			
+			return true;
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Insert Doctor failed");
 			e.printStackTrace();
-		}
+		} return false;
 	}
 	
-	//This method gets all employees from the DB
+	//This method gets all doctors from the DB
     
 	public ArrayList<Doctor> getDoctor() {
  
@@ -53,15 +55,15 @@ public class DoctorDAO implements DoctorDAOInterface{
 			//remember to execute 
 			ResultSet rs = s.executeQuery(sql);
 			
-			ArrayList<Doctor> doctorList = new ArrayList();
-			// us rs.next()in a while loop to create diagnosis object and populate our ArrayList
+			ArrayList<Doctor> doctorList = new ArrayList<>();
+			// us rs.next()in a while loop to create doctor object and populate our ArrayList
 			
 			while(rs.next()) {
 				Doctor doc = new Doctor(
 						rs.getInt("doc_id"),
 						rs.getString("doc_name"),
 						rs.getString("doc_field"),
-						rs.getString("doc_yoe"),
+						rs.getInt("doc_yoe"),
 						null
 						);
 				
@@ -71,10 +73,10 @@ public class DoctorDAO implements DoctorDAOInterface{
 				
 				Patient p = pDAO.getPatientById(patFK);
 				
-				//use setter from our diagnosis class to set the object from our Diagnosis db
+				//use setter from our doctor class to set the object from our Doctor db
 				doc.setPat(p);
 				//thanks to the set we have fully initialize the diagnosis object
-				doctorList.add(doc);//for every diagnosis returned we put it in the Arraylist
+				doctorList.add(doc);//for every doctor returned we put it in the Arraylist
 				
 			}
 			return doctorList;//once the while loop breaks 
@@ -97,6 +99,52 @@ public class DoctorDAO implements DoctorDAOInterface{
 		return null;
 	}
 
+	public boolean deleteDoctorId(int id) {
+		try (Connection conn = ConnectionUtil.getConnection()){
+			String sql = "delete from doctor where doc_id = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			
+			ps.executeUpdate();
+			System.out.println(id + " has been deleted successfully ");
+			return true;
+		}catch(SQLException e)	{
+			System.out.println("Failed to delete");
+			e.printStackTrace();
+		}
+		
+		return false;
+
+	}
+
 	
+	public boolean updateDoctorYoe(int yoe, String field) {
+		// TODO Auto-generated method stub
+		try (Connection conn = ConnectionUtil.getConnection()){
+			String sql = "update doctor set doc_yoe = ? where doc_field = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, yoe);
+			ps.setString(2, field);
+			ps.executeUpdate();
+			System.out.println( " Your year of experience has been updated to " + yoe);
+			return true;
+		}catch(SQLException e)	{
+			System.out.println("Failed to update");
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+//	@Override
+//	public boolean insertDoctor(Doctor doctor, int pat_id) {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
+
+//	@Override
+//public boolean insertDoctor(Doctor doctor) {
+//	// TODO Auto-generated method stub
+//	return false;
+//}
 
 	}
