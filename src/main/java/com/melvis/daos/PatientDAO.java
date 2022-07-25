@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.melvis.models.Doctor;
 import com.melvis.models.Patient;
 import com.melvis.utils.ConnectionUtil;
 //This patientdao is responsible for communicating with the roles in the database

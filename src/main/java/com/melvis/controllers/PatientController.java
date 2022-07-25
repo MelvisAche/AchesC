@@ -23,7 +23,7 @@ public class PatientController {
 	
 	public Handler updatePatientHandler = (ctx) ->{
 		// A string to hold the patient name  which comes in to hold the path parameter
-		String address = ctx.pathParam("address");
+		String address = ctx.body();
 		String name = ctx.pathParam("name"); //path param gives us the value the user sends in
 		//parseInt converts ctx.body to integer
 		

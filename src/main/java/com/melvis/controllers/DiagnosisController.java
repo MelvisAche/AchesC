@@ -54,7 +54,7 @@ public class DiagnosisController {
 	
 	public Handler updateDiagnosisHandler = (ctx) ->{
 		
-		String results = ctx.pathParam("results"); //path param gives us the value the user sends in
+		String results = ctx.body(); //path param gives us the value the user sends in
 		String prescription = ctx.pathParam("prescription"); //parseInt converts ctx.body to integer
 		
 		if(dDAO.updateDiagnosisResults(results, prescription)) {

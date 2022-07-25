@@ -7,6 +7,8 @@ import com.melvis.controllers.DiagnosisController;
 import com.melvis.controllers.DoctorControllers;
 import com.melvis.controllers.PatientController;
 import com.melvis.utils.ConnectionUtil;
+import com.melvis.controllers.AuthController;
+import com.melvis.daos.AuthDAO;
 
 import io.javalin.Javalin;
 
@@ -15,9 +17,7 @@ public static void main(String[] args) {
 	
 
 	System.out.println("============ Welcome to a simple Hospital management system=====");
-	//Try-with-resources block. It test whether our connection works
-	//It works by trying to open a certain resource
-	
+	//Testing connection
 	try(Connection conn = ConnectionUtil.getConnection()){
 		System.out.println("Connection Successful...");
 	}catch(SQLException e) {
@@ -29,27 +29,33 @@ public static void main(String[] args) {
 			config -> {
 				config.enableCorsForAllOrigins();
 			}
-			).start(8080); //we need .start() to start our java server to port 5000
+			).start(8080); //.start() starts our java server to port 8080
 	
 	DoctorControllers dc = new DoctorControllers();
 	//app.get() is the javalin method that takes in GET requests.
 	app.get("/doctor", dc.getDoctorHandler);
 	app.post("/insertDoctor", dc.insertDoctorHandler);
-	app.put("/doctor/:field", dc.updateDoctorHandler);
+	app.put("/doctor/:field", dc.updateDoctorHandler);//updating yoe where field equals
 	app.delete("/doctor/:doc_id", dc.deleteDoctorHandler);
 	
 	
 	PatientController pc = new PatientController();
 	app.get("/patient", pc.getPatientHandler);
 	app.post("/insertPatient", pc.insertPatientHandler);
-	app.put("/patient/:name", pc.updatePatientHandler);
+	app.put("/patient/:name", pc.updatePatientHandler);//updating address where patient name equals
 	app.delete("/patient/:pat_id", pc.deletePatientHandler);
 	
 	DiagnosisController dcn = new DiagnosisController();
 	app.get("/diagnosis", dcn.getDiagnosisHandler);
 	app.post("/insertDiagnosis", dcn.insertDiagnosisHandler);
-	app.put("/diagnosis/:prescription", dcn.updateDiagnosisHandler);
+	app.put("/diagnosis/:prescription", dcn.updateDiagnosisHandler);//updating results where prescription equals to
 	app.delete("/diagnosis/:diag_id", dcn.deleteDiagnosisHandler);
+	
+	//Login
+	AuthDAO aDAO = new AuthDAO();
+	System.out.println(aDAO.login("Melvis", "2554") || aDAO.login("Khalifa", "password0028"));
+	AuthController ac = new AuthController();
+	app.post("/login", ac.loginHandler);
 }
 }
 
